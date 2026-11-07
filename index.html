@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aula 6.o</title>
+
+  <!-- Enlazamos la hoja de estilos (todavía vacía) -->
+  <link rel="stylesheet" href="styles.css">
+<!-- Configuración de PWA y Dispositivos Móviles -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#D6457C">
+  <link rel="apple-touch-icon" href="icono-192.png">
+</head>
+<body>
+
+  <!-- ===================== ENCABEZADO ===================== -->
+  <header id="encabezado">
+    <h1>Aula 6.o</h1>
+
+    <!-- Selector para cambiar entre Docente y Alumno -->
+    <div class="campo-rol">
+      <label for="selectorRol">Ver como</label>
+      <select id="selectorRol">
+        <option value="docente">Docente</option>
+        <option value="alumno">Alumno</option>
+      </select>
+    </div>
+
+    <!-- Botones para guardar y cargar todos los datos -->
+    <div class="acciones-datos">
+      <button type="button" id="botonExportar">Exportar</button>
+      <button type="button" id="botonImportar">Importar</button>
+      <!-- Input de archivo oculto: el botón Importar lo va a activar desde JS -->
+      <input type="file" id="archivoImportar" accept=".json" hidden>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===================== NOMBRE DEL ALUMNO ===================== -->
+    <!-- Solo se ve en modo alumno: el nombre se pide una sola vez -->
+    <section id="identificacionAlumno" data-rol="alumno">
+
+      <!-- Formulario para escribir el nombre (se oculta cuando ya hay uno guardado) -->
+      <form id="formularioNombreAlumno" novalidate>
+        <h3>¿Quién sos?</h3>
+
+        <label for="nombreAlumno">Tu nombre (usá uno ficticio)</label>
+        <input type="text" id="nombreAlumno" autocomplete="off" placeholder="Ej.: Alumno Ejemplo">
+
+        <p id="errorNombreAlumno" class="mensaje-error" role="alert"></p>
+
+        <div class="botones-formulario">
+          <button type="submit">Guardar nombre</button>
+          <button type="button" id="botonCancelarNombre" class="boton-secundario" hidden>Cancelar</button>
+        </div>
+      </form>
+
+      <!-- Saludo (se muestra cuando ya hay un nombre guardado) -->
+      <div id="saludoAlumno" hidden>
+        <p id="textoSaludo"></p>
+        <button type="button" id="botonCambiarNombre" class="boton-secundario">Cambiar nombre</button>
+      </div>
+    </section>
+
+    <!-- ===================== VISTA 1: MIS CURSOS ===================== -->
+    <section id="vistaCursos">
+      <h2>Mis cursos</h2>
+
+      <!-- Acá JS va a dibujar una tarjeta por cada curso -->
+      <div id="grillaCursos"></div>
+
+      <!-- Formulario para crear o editar un curso (solo lo ve el docente) -->
+      <!-- "novalidate": las validaciones las hacemos nosotros en app.js -->
+      <form id="formularioCurso" data-rol="docente" novalidate>
+        <h3 id="tituloFormularioCurso">Crear curso</h3>
+
+        <label for="nombreCurso">Nombre del curso</label>
+        <input type="text" id="nombreCurso" required>
+
+        <label for="codigoCurso">Código (3 a 8 letras o números)</label>
+        <input type="text" id="codigoCurso" autocomplete="off">
+
+        <label for="docenteCurso">Docente</label>
+        <input type="text" id="docenteCurso">
+
+        <label for="colorCurso">Color de la tarjeta</label>
+        <input type="color" id="colorCurso" value="#D6457C">
+
+        <label for="descripcionCurso">Descripción</label>
+        <textarea id="descripcionCurso" rows="3"></textarea>
+
+        <!-- Mensaje de error (queda vacío si todo está bien) -->
+        <p id="errorCurso" class="mensaje-error" role="alert"></p>
+
+        <div class="botones-formulario">
+          <button type="submit" id="botonGuardarCurso">Crear curso</button>
+          <!-- Solo aparece cuando se está editando un curso -->
+          <button type="button" id="botonCancelarCurso" class="boton-secundario" hidden>Cancelar edición</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ===================== VISTA 2: CURSO (MURO) ===================== -->
+    <!-- Empieza oculta: atributo "hidden" -->
+    <section id="vistaCurso" hidden>
+      <button type="button" id="botonVolverCursos">Volver a Mis cursos</button>
+
+      <h2 id="tituloCurso"></h2>
+      <p id="descripcionDelCurso"></p>
+
+      <!-- Formulario para publicar un material en el muro (solo docente) -->
+      <!-- "novalidate": las validaciones las hacemos nosotros en app.js -->
+      <form id="formularioPublicacion" data-rol="docente" novalidate>
+        <h3 id="tituloFormularioPublicacion">Publicar en el muro</h3>
+
+        <label for="tipoPublicacion">Tipo</label>
+        <select id="tipoPublicacion">
+          <option value="texto">Texto</option>
+          <option value="enlace">Enlace</option>
+          <option value="archivo">Archivo</option>
+          <option value="tarea">Tarea</option>
+        </select>
+
+        <label for="tituloPublicacion">Título</label>
+        <input type="text" id="tituloPublicacion" required>
+
+        <!-- Solo se muestra el grupo que corresponde al tipo elegido -->
+        <div class="grupo-campo" id="grupoTexto">
+          <label for="textoPublicacion">Texto</label>
+          <textarea id="textoPublicacion" rows="4"></textarea>
+        </div>
+
+        <div class="grupo-campo" id="grupoEnlace" hidden>
+          <label for="enlacePublicacion">Enlace (tiene que empezar con https://)</label>
+          <input type="text" id="enlacePublicacion" inputmode="url" autocomplete="off" placeholder="https://...">
+        </div>
+
+        <div class="grupo-campo" id="grupoArchivo" hidden>
+          <label for="archivoPublicacion">Archivo (solo se guarda su nombre)</label>
+          <input type="file" id="archivoPublicacion">
+          <!-- Al editar, muestra el nombre del archivo que ya tenía -->
+          <p id="archivoActual" class="nota-formulario" hidden></p>
+        </div>
+
+        <!-- Campos de la tarea -->
+        <div class="grupo-campo" id="grupoTarea" hidden>
+          <label for="consignaPublicacion">Consigna</label>
+          <textarea id="consignaPublicacion" rows="4"></textarea>
+
+          <label for="fechaLimitePublicacion">Fecha límite</label>
+          <input type="datetime-local" id="fechaLimitePublicacion">
+
+          <label for="puntajePublicacion">Puntaje máximo</label>
+          <input type="number" id="puntajePublicacion" min="1" step="1" inputmode="numeric">
+        </div>
+
+        <!-- Mensaje de error (queda vacío si todo está bien) -->
+        <p id="errorPublicacion" class="mensaje-error" role="alert"></p>
+
+        <div class="botones-formulario">
+          <button type="submit" id="botonGuardarPublicacion">Publicar</button>
+          <!-- Solo aparece cuando se está editando una publicación -->
+          <button type="button" id="botonCancelarPublicacion" class="boton-secundario" hidden>Cancelar edición</button>
+        </div>
+      </form>
+
+      <h3>Muro</h3>
+      <!-- Lista vacía: JS va a agregar las publicaciones -->
+      <ul id="listaMuro"></ul>
+    </section>
+
+    <!-- ===================== VISTA 3: TAREA ===================== -->
+    <section id="vistaTarea" hidden>
+      <button type="button" id="botonVolverCurso">Volver al curso</button>
+
+      <h2 id="tituloTarea"></h2>
+
+      <!-- Consigna de la tarea -->
+      <article id="consignaTarea">
+        <h3>Consigna</h3>
+        <p id="textoConsigna"></p>
+        <p id="vencimientoTarea"></p>
+        <p id="puntajeTarea"></p>
+      </article>
+
+      <!-- Formulario de entrega (solo alumno) -->
+      <!-- "novalidate": las validaciones las hacemos nosotros en app.js -->
+      <form id="formularioEntrega" data-rol="alumno" novalidate>
+        <h3 id="tituloFormularioEntrega">Entregar tarea</h3>
+
+        <!-- Muestra con qué nombre se va a entregar -->
+        <p id="entregaComo" class="nota-formulario"></p>
+
+        <label for="textoEntrega">Tu respuesta (texto)</label>
+        <textarea id="textoEntrega" rows="4"></textarea>
+
+        <label for="enlaceEntrega">Enlace (tiene que empezar con https://)</label>
+        <input type="text" id="enlaceEntrega" inputmode="url" autocomplete="off" placeholder="https://...">
+
+        <p class="nota-formulario">Completá el texto, el enlace, o los dos.</p>
+
+        <!-- Mensaje de error (queda vacío si todo está bien) -->
+        <p id="errorEntrega" class="mensaje-error" role="alert"></p>
+
+        <div class="botones-formulario">
+          <button type="submit" id="botonGuardarEntrega">Entregar</button>
+          <!-- Solo aparece cuando se está editando una entrega -->
+          <button type="button" id="botonCancelarEntrega" class="boton-secundario" hidden>Cancelar edición</button>
+        </div>
+      </form>
+
+      <h3 id="tituloListaEntregas">Entregas</h3>
+      <!-- Cuántas entregas hay y cuántas faltan corregir (solo docente) -->
+      <p id="resumenEntregas" data-rol="docente"></p>
+      <!-- Lista vacía: JS va a agregar las entregas -->
+      <ul id="listaEntregas"></ul>
+    </section>
+
+  </main>
+
+  <!-- Enlazamos el JavaScript al final para que el HTML ya esté cargado (todavía vacío) -->
+  <script src="app.js"></script>
+</body>
+</html>

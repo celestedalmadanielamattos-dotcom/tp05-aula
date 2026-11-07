@@ -1,0 +1,683 @@
+/* ==========================================================
+   styles.css - Aula 6.o
+   ========================================================== */
+
+/* ---------- 1. FUENTES DE GOOGLE ----------
+   Si no hay internet, el navegador usa system-ui (ver más abajo) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap");
+
+/* ---------- 2. VARIABLES (colores, fuentes, medidas) ---------- */
+:root {
+  /* Colores */
+  --color-principal: #D6457C;          /* rosa principal */
+  --color-principal-oscuro: #B8346A;   /* rosa para el hover */
+  --color-violeta: #8B6FD1;            /* violeta de acento */
+  --color-violeta-suave: #EFE9FB;      /* violeta muy claro para fondos */
+  --color-fondo: #FAF7FD;              /* fondo general de la página */
+  --color-blanco: #FFFFFF;             /* tarjetas y botones */
+  --color-texto: #2E2540;              /* texto principal */
+  --color-texto-suave: #6D6580;        /* texto secundario */
+  --color-borde: #E3DAF2;              /* bordes de campos */
+  --color-error-fondo: #FDEAF2;        /* fondo de errores y botón borrar */
+
+  /* Tipografías (con system-ui de respaldo) */
+  --fuente-titulos: "Poppins", system-ui, sans-serif;
+  --fuente-texto: "Inter", system-ui, sans-serif;
+
+  /* Medidas reutilizables */
+  --radio: 16px;
+  --radio-chico: 10px;
+  --sombra-suave: 0 4px 14px rgba(70, 40, 120, 0.10);
+  --sombra-elevada: 0 8px 20px rgba(214, 69, 124, 0.30);
+  --espacio: 1rem;
+}
+
+/* ---------- 3. BASE ---------- */
+/* Hace que el padding no agrande las cajas */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-texto);
+  line-height: 1.5;
+}
+
+/* El atributo hidden tiene que ganarle a cualquier "display" que pongamos */
+[hidden] {
+  display: none !important;
+}
+
+/* Títulos con Poppins */
+h1, h2, h3 {
+  font-family: var(--fuente-titulos);
+  margin: 0 0 var(--espacio);
+  line-height: 1.2;
+}
+
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.15rem; }
+
+/* ---------- 4. ENCABEZADO ----------
+   En el celular: todo apilado en una columna */
+#encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio);
+  padding: var(--espacio);
+  background: var(--color-principal);
+  color: var(--color-blanco);
+  box-shadow: var(--sombra-suave);
+}
+
+#encabezado h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.campo-rol {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.acciones-datos {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ---------- 5. CONTENIDO PRINCIPAL ---------- */
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--espacio);
+}
+
+/* Separación entre las partes de cada vista */
+main section > * + * {
+  margin-top: var(--espacio);
+}
+
+/* ---------- 6. FORMULARIOS COMO TARJETAS ---------- */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  background: var(--color-blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-suave);
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  color: var(--color-texto);
+  background: var(--color-blanco);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-chico);
+}
+
+/* Resaltado al escribir (también sirve para quien usa teclado) */
+input:focus,
+textarea:focus,
+select:focus,
+button:focus-visible {
+  outline: 3px solid var(--color-violeta);
+  outline-offset: 2px;
+}
+
+/* El select del encabezado se ve más chico */
+#encabezado select {
+  width: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* ---------- 7. BOTONES CON HOVER ---------- */
+button {
+  padding: 0.6rem 1.1rem;
+  font-family: var(--fuente-texto);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-blanco);
+  background: var(--color-principal);
+  border: none;
+  border-radius: var(--radio-chico);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+/* Al pasar el mouse: cambia de color y se eleva un poquito */
+button:hover {
+  background: var(--color-principal-oscuro);
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-elevada);
+}
+
+/* Al hacer click vuelve a su lugar */
+button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Los botones del encabezado son blancos sobre el fondo rosa */
+#encabezado button {
+  color: var(--color-principal);
+  background: var(--color-blanco);
+}
+
+#encabezado button:hover {
+  color: var(--color-blanco);
+  background: var(--color-violeta);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.20);
+}
+
+/* Botones de "Volver": violeta suave */
+#botonVolverCursos,
+#botonVolverCurso {
+  color: var(--color-violeta);
+  background: var(--color-violeta-suave);
+}
+
+#botonVolverCursos:hover,
+#botonVolverCurso:hover {
+  color: var(--color-blanco);
+  background: var(--color-violeta);
+}
+
+/* Íconos con emojis en los botones principales */
+#botonExportar::before { content: "📤 "; }
+#botonImportar::before { content: "📥 "; }
+#botonVolverCursos::before,
+#botonVolverCurso::before { content: "⬅️ "; }
+
+/* ---------- 8. GRILLA Y TARJETAS DE CURSOS ----------
+   Mobile first: una sola columna */
+#grillaCursos,
+#listaMuro,
+#listaEntregas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Cada curso es una tarjeta con una franja de color arriba */
+.tarjeta-curso {
+  position: relative;
+  padding: 1.5rem 1.25rem 1.25rem;
+  overflow: hidden;
+  background: var(--color-blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-suave);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* La franja de color */
+.tarjeta-curso::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: var(--color-curso, linear-gradient(90deg, var(--color-principal), var(--color-violeta)));
+}
+
+.tarjeta-curso:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra-elevada);
+}
+
+.tarjeta-curso h3::before {
+  content: "📚 ";
+}
+
+.tarjeta-curso p {
+  margin: 0;
+  color: var(--color-texto-suave);
+}
+
+/* ---------- 9. ELEMENTOS DE LAS LISTAS (muro y entregas) ---------- */
+.publicacion,
+.entrega {
+  padding: 1rem 1.25rem;
+  background: var(--color-blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-suave);
+}
+
+.publicacion h4,
+.entrega h4 {
+  margin: 0 0 0.4rem;
+  font-family: var(--fuente-titulos);
+}
+
+.publicacion p,
+.entrega p {
+  margin: 0;
+  color: var(--color-texto-suave);
+}
+
+/* Ícono según el tipo (el JS le pone data-tipo a cada publicación) */
+.publicacion[data-tipo="texto"]   h4::before { content: "📝 "; }
+.publicacion[data-tipo="enlace"]  h4::before { content: "🔗 "; }
+.publicacion[data-tipo="archivo"] h4::before { content: "📎 "; }
+.publicacion[data-tipo="tarea"]   h4::before { content: "✅ "; }
+
+/* Las tareas se destacan con un borde rosa a la izquierda */
+.publicacion[data-tipo="tarea"] {
+  border-left: 6px solid var(--color-principal);
+}
+
+/* Entregas con ícono propio */
+.entrega h4::before {
+  content: "📬 ";
+}
+
+/* ---------- 10. CONSIGNA DE LA TAREA ---------- */
+#consignaTarea {
+  padding: 1.25rem;
+  background: var(--color-violeta-suave);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-suave);
+}
+
+#consignaTarea h3::before {
+  content: "📋 ";
+}
+
+#consignaTarea p {
+  margin: 0;
+}
+
+/* ---------- 11. TABLET Y COMPUTADORA (desde 768 px) ---------- */
+@media (min-width: 768px) {
+
+  /* Encabezado en una sola fila */
+  #encabezado {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--espacio) 2rem;
+  }
+
+  /* Cursos, muro y entregas en dos columnas */
+  #grillaCursos,
+  #listaMuro,
+  #listaEntregas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------- 12. ELEMENTOS SOLO PARA EL DOCENTE ----------
+   El JS pone data-modo="alumno" en el <body> cuando se elige "Alumno" */
+body[data-modo="alumno"] .solo-docente {
+  display: none !important;
+}
+
+/* ---------- 13. CURSOS: FORMULARIO, ERRORES Y TARJETAS ---------- */
+
+/* Selector de color */
+input[type="color"] {
+  width: 4.5rem;
+  height: 2.6rem;
+  padding: 0.2rem;
+  cursor: pointer;
+  background: var(--color-blanco);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-chico);
+}
+
+/* Mensaje de error del formulario (si está vacío, no se ve) */
+.mensaje-error {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+  color: var(--color-principal-oscuro);
+  background: var(--color-error-fondo);
+  border-radius: var(--radio-chico);
+}
+
+.mensaje-error:empty {
+  display: none;
+}
+
+.botones-formulario {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Botón secundario (violeta suave) y botón de peligro (para borrar) */
+.boton-secundario {
+  color: var(--color-violeta);
+  background: var(--color-violeta-suave);
+}
+
+.boton-secundario:hover {
+  color: var(--color-blanco);
+  background: var(--color-violeta);
+}
+
+.boton-peligro {
+  color: var(--color-principal-oscuro);
+  background: var(--color-error-fondo);
+}
+
+.boton-peligro:hover {
+  color: var(--color-blanco);
+  background: var(--color-principal-oscuro);
+}
+
+/* Íconos de Editar y Borrar */
+[data-accion="editar"]::before { content: "✏️ "; }
+[data-accion="borrar"]::before { content: "🗑️ "; }
+
+/* Mensaje cuando no hay cursos: ocupa todo el ancho de la grilla */
+.mensaje-vacio {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 1.25rem;
+  text-align: center;
+  color: var(--color-texto-suave);
+  background: var(--color-blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-suave);
+}
+
+/* Código del curso: pastilla violeta */
+.tarjeta-curso .codigo-curso {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  padding: 0.1rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-violeta);
+  background: var(--color-violeta-suave);
+  border-radius: 999px;
+}
+
+/* El nombre del curso es un botón, pero tiene que verse como un título */
+.tarjeta-curso .enlace-curso,
+.tarjeta-curso .enlace-curso:hover,
+.tarjeta-curso .enlace-curso:active {
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+}
+
+.tarjeta-curso .enlace-curso {
+  color: var(--color-texto);
+}
+
+.tarjeta-curso .enlace-curso:hover {
+  color: var(--color-principal);
+}
+
+.tarjeta-curso .acciones-curso {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: var(--espacio);
+}
+
+/* ---------- 14. MURO: FORMULARIO DE MATERIALES Y PUBLICACIONES ---------- */
+
+/* Grupo de campos que se muestra u oculta según el tipo */
+.grupo-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+input[type="file"] {
+  width: 100%;
+  font: inherit;
+}
+
+/* Aviso chico dentro del formulario */
+.nota-formulario {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-texto-suave);
+}
+
+.publicacion .fecha-publicacion {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-texto-suave);
+}
+
+/* Respeta los saltos de línea del texto y corta los enlaces largos */
+.publicacion .contenido-publicacion {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.publicacion a {
+  font-weight: 600;
+  color: var(--color-principal-oscuro);
+}
+
+.publicacion .acciones-publicacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: var(--espacio);
+}
+
+/* ---------- 15. TAREAS Y ENTREGAS ---------- */
+
+/* Campos de número y de fecha, con el mismo aspecto que los de texto */
+input[type="number"],
+input[type="datetime-local"] {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  color: var(--color-texto);
+  background: var(--color-blanco);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-chico);
+}
+
+/* Elementos que solo ve el alumno (lo contrario de solo-docente) */
+body[data-modo="docente"] .solo-alumno {
+  display: none !important;
+}
+
+/* Vencimiento y puntaje dentro de la tarea del muro */
+.publicacion .datos-tarea {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+/* Botones de editar y borrar del docente, uno al lado del otro */
+.acciones-docente {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+[data-accion="abrir"]::before { content: "📂 "; }
+
+/* Vencimiento y puntaje en la vista de la tarea */
+#consignaTarea p + p {
+  margin-top: 0.5rem;
+}
+
+/* Entregas */
+.entrega .estado-entrega {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  padding: 0.1rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+.entrega .estado-entrega[data-estado="a tiempo"] {
+  color: var(--color-texto);
+  background: var(--color-violeta-suave);
+}
+
+.entrega .estado-entrega[data-estado="tarde"] {
+  color: var(--color-principal-oscuro);
+  background: var(--color-error-fondo);
+}
+
+.entrega .fecha-entrega {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-texto-suave);
+}
+
+.entrega .contenido-publicacion {
+  margin-top: 0.5rem;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.entrega a {
+  font-weight: 600;
+  color: var(--color-principal-oscuro);
+}
+
+.entrega .nota-entrega {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.entrega .acciones-publicacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: var(--espacio);
+}
+
+/* ---------- 16. NOMBRE DEL ALUMNO Y CORRECCIÓN ---------- */
+
+/* Los avisos chicos vacíos no ocupan lugar */
+.nota-formulario:empty {
+  display: none;
+}
+
+/* Saludo cuando el alumno ya guardó su nombre */
+#saludoAlumno {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--color-blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-suave);
+}
+
+#saludoAlumno p {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Resumen de entregas por corregir */
+#resumenEntregas {
+  font-weight: 600;
+}
+
+/* Insignias de estado: más de una puede ir en la misma tarjeta */
+.entrega .estado-entrega + .estado-entrega {
+  margin-left: 0.4rem;
+}
+
+.entrega .estado-entrega[data-estado="corregida"] {
+  color: var(--color-blanco);
+  background: var(--color-principal-oscuro);
+}
+
+.entrega .estado-entrega[data-estado="pendiente"] {
+  color: var(--color-texto-suave);
+  background: var(--color-blanco);
+  border: 1px solid var(--color-borde);
+}
+
+/* Los mensajes de error dentro de una entrega conservan su color */
+.entrega .mensaje-error {
+  color: var(--color-principal-oscuro);
+}
+
+/* Formulario de corrección dentro de cada entrega (docente) */
+.entrega .formulario-correccion {
+  margin-top: var(--espacio);
+  padding: 1rem;
+  background: var(--color-violeta-suave);
+  box-shadow: none;
+}
+
+.formulario-correccion h5 {
+  margin: 0;
+  font-family: var(--fuente-titulos);
+  font-size: 1rem;
+}
+
+.formulario-correccion label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.formulario-correccion input[type="number"] {
+  max-width: 8rem;
+}
+
+.formulario-correccion button {
+  align-self: flex-start;
+}
+
+/* Nota y devolución que ve el alumno cuando ya está corregida */
+.entrega .resultado-correccion {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-violeta-suave);
+  border-radius: var(--radio-chico);
+}
+
+.entrega .resultado-correccion .nota-entrega {
+  margin-top: 0;
+}
+
+.entrega .resultado-correccion p + p {
+  margin-top: 0.4rem;
+}
+
+.entrega .devolucion-entrega {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  color: var(--color-texto);
+}
